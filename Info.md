@@ -72,9 +72,9 @@ now  add a link tag to all the html pages, in our case index.html in src and in 
 
 }
 ```
-### Apple support 
+### Safari support 
 to make sure that our app is also supporting Apple (safari)
-in the index.html add the following meta and links
+in all html files or (all html file should have these meta prooerties)
 ```
 </head>
 .
@@ -94,4 +94,15 @@ in the index.html add the following meta and links
   <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-152x152.png" sizes="152x152">
   <link rel="apple-touch-icon" href="/src/images/icons/apple-icon-180x180.png" sizes="180x180">
 </head>
-
+```
+### Explorer support
+you need to add these meta data tags for all html files too:
+```
+<head>
+    .
+    .
+    <!-- Explorer -->
+    <meta name="msapplication-TileImage" content="/src/icons/app-icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#fff">
+    <meta name="theme-color" content="#3f51b5">
+</head>
