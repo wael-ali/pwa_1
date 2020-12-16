@@ -46,7 +46,7 @@ now  add a link tag to all the html pages, in our case index.html in src and in 
     "description": "whenever the browser need description for your app it finds it here",
     "dir": "ltr", // Read direction of your app.
     "lang": "en-US", // Sets the Main language of your app.
-    "orientation": "portrait-primary", // Set and inforce default orientation.
+    "orientation": "portrait-primary", // Set and inforce default orientation. [protrait, protrait-primary, landscape, any]
     "icons": [], // configure icons e.g. on homescreen.
     "icons": [
         {
