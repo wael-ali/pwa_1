@@ -122,3 +122,24 @@ you need to add these meta data tags for all html files too:
 3. Notification Interaction: User interacts with desplayed notification.
 4. Background Sync: Service Worker receives Backgground Sync Event (e.g. Internet connection was restored).
 5. Service Worker Lifecycle: Service wroker phase changes.
+### Createing first service worker
+1. create sw.js in the public folder and let it be empty.
+``` 
+$ touch sw.js
+``` 
+2. register the new service worker but how?! it in your normal js code we can do it in the index.html inside a script tag and then add the same code to every html page but this is not ideal, so the best way is to write the registration code in app.js as we import it in all html pages.
+```
+// app.js
+
+// Check if the service worker feature is supported by the browser.
+// navigator simply is the browser
+if('serviceWorker' in navigator){
+    navigator
+        .serviceWorker
+        .register('/sw.js') // the path of the service worker sw.js in the root folder
+        .then(function () {
+            console.log('Service worker registered!');
+        })
+    ;
+}
+```
