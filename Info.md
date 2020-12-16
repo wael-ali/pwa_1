@@ -106,3 +106,11 @@ you need to add these meta data tags for all html files too:
     <meta name="msapplication-TileColor" content="#fff">
     <meta name="theme-color" content="#3f51b5">
 </head>
+```
+## 2. Service Workers
+Loaded js: Runs on one single thread, attached to individual HTML pages.
+Service Worker: 
+    1. Runs on additional thread, decoupled from HTML pages.
+    2. Manages  All pages of given scope(e.g. all pages of a domain).
+    3. Lives on even after pages have been closed. (in the background).
+    4. Good at reacting to events
