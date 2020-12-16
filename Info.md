@@ -108,9 +108,17 @@ you need to add these meta data tags for all html files too:
 </head>
 ```
 ## 2. Service Workers
-Loaded js: Runs on one single thread, attached to individual HTML pages.
-Service Worker: 
+#
+1. Loaded js: 
+    1. Runs on one single thread, attached to individual HTML pages.
+2. Service Worker: 
     1. Runs on additional thread, decoupled from HTML pages.
     2. Manages  All pages of given scope(e.g. all pages of a domain).
     3. Lives on even after pages have been closed. (in the background).
     4. Good at reacting to events
+### Listenable Events in Server workers
+1. Fetch: Browser of page-related js initates a fetch (Htttp request) vip: ajax or axios cannt triger a fetch event.
+2. Push Notifications: Service Workers receives web push notification (from server).
+3. Notification Interaction: User interacts with desplayed notification.
+4. Background Sync: Service Worker receives Backgground Sync Event (e.g. Internet connection was restored).
+5. Service Worker Lifecycle: Service wroker phase changes.
