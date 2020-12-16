@@ -123,16 +123,21 @@ you need to add these meta data tags for all html files too:
 4. Background Sync: Service Worker receives Backgground Sync Event (e.g. Internet connection was restored).
 5. Service Worker Lifecycle: Service wroker phase changes.
 ### Createing first service worker
-1. create sw.js in the public folder and let it be empty.
+_**(1)-- create sw.js in the public folder and let it be empty.**_
 ``` 
 $ touch sw.js
 ``` 
-2. register the new service worker but how?! it in your normal js code we can do it in the index.html inside a script tag and then add the same code to every html page but this is not ideal, so the best way is to write the registration code in app.js as we import it in all html pages.
+_**(2)-- register the new service worker but how?!**_ 
+
+in your normal js code we can do it in the index.html inside a script tag and then add the same code to every html page but this is not ideal, so the best way is to write the registration code in app.js as we import it in all html pages.
 ```
 // app.js
 
 // Check if the service worker feature is supported by the browser.
-// navigator simply is the browser
+// navigator simply is the browser.
+// the .register('/sw.js', {scope: '/help'}) method,
+// takes an other argument which is an object with scope property,
+// but we will not use it here.
 if('serviceWorker' in navigator){
     navigator
         .serviceWorker
@@ -143,3 +148,26 @@ if('serviceWorker' in navigator){
     ;
 }
 ```
+##### *Note:*
+* sw.js and manifest.json are not related.
+* service workers work only with pages served with https, _loclahost is an exception for developers_.
+* service workers does not have access to dom events.
+* we allways attach event listners to the service worker, refering to it with the self keyword.
+
+_**(3)-- Reaction to incomming events:**_ 
+
+In the sw.js add the following:
+```
+// self = the service worker
+self.addEventListener('install', function (event) {
+    console.log('[Service Worker] Installing service worker ...', event);
+});
+
+self.addEventListener('activate', function (event) {
+    console.log('[Service Worker] Installing service worker ...', event);
+    // mybe will not be needed in future!!
+    return self.clients.claim();
+});
+```
+After reloading the page we see the first log but not the second one !!.
+
