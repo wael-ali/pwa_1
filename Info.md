@@ -171,5 +171,11 @@ self.addEventListener('activate', function (event) {
 // After reloading the page we see the first log but not the second one !!.
 // you have to close all tabs for the app, or go to devtools => application => serviceworker => ///// skip waiting the new service worker to be activated.
 ```
+## Connecting Chrome Developer Tools to a Real/ Emulated Device
+It's easy to connect your Chrome Developer Tools with a Real or Emulated Android Device (event though the latter unfortunately never worked for me).
+
+The following article explains it step-by-step and by using helpful images: https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
+
+Make sure you enabled "Developer Mode" on your Device! You do that by tapping your Android Build Number (in the Settings) 7 times. Yes, this is no joke ;-)
 
 
