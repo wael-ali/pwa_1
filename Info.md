@@ -168,6 +168,8 @@ self.addEventListener('activate', function (event) {
     // mybe will not be needed in future!!
     return self.clients.claim();
 });
+// After reloading the page we see the first log but not the second one !!.
+// you have to close all tabs for the app, or go to devtools => application => serviceworker => ///// skip waiting the new service worker to be activated.
 ```
-After reloading the page we see the first log but not the second one !!.
+
 
