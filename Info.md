@@ -177,5 +177,84 @@ It's easy to connect your Chrome Developer Tools with a Real or Emulated Android
 The following article explains it step-by-step and by using helpful images: https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
 
 Make sure you enabled "Developer Mode" on your Device! You do that by tapping your Android Build Number (in the Settings) 7 times. Yes, this is no joke ;-)
+## Deferring the App install Banner.
+By listening to the 'beforeinstallprompt' event we can control showing the install banner after the first time it was trigered,
+in the app.js add the following:
+```
+// app.js
+.
+.
 
+// preventing chrome from showing the install banner, save the event in variable to used later
+window.addEventListener('beforeinstallprompt', function (event) {
+    console.log('before install prompt');
+    event.preventDefault();
+    deferredPrompt = event;
+    return false;
+});
+```
+and in the feed.js, lets say that the best moment to show the installation banner is when the creating a new post/feed.
+```
+.
+.
+function openCreatePostModal() {
+  createPostArea.style.display = 'block';
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function(choiceResult) {
+      console.log(choiceResult.outcome);
+      if (choiceResult.outcome === 'dissmissed') { // User clicked the x
+        console.log('User canceled installation.');
+      }else{
+        console.log('User added app to home screen..');
+      }
+    });
+  }
+  deferredPrompt = null; 
+}
+.
+.
 
+```
+## Service Worker FAQ
+_**Is the Service Worker installed everytime I refresh the page?**_
+
+No, whilst the browser does of course (naturally) execute the register()  code everytime you refresh the page, it won't install the service worker if the service worker file hasn't changed. If it only changed by 1 byte though, it'll install it as a new service worker (but wait with the activation as explained).
+
+_**Can I unregister a Service Worker?**_
+
+Yes, this is possible, the following code does the trick:
+```
+navigator.serviceWorker.getRegistrations().then(function(registrations) {
+ for(let registration of registrations) {
+  registration.unregister()
+} })
+```
+_**My app behaves strangely/ A new Service Worker isn't getting installed.**_
+
+It probably gets installed but you still have some tab/ window with your app open (in one and the same browser). New service workers don't activate before all tabs/ windows with your app running in it are closed. Make sure to do that and then try again.
+
+_**Can I have multiple 'fetch' listeners in a service worker?**_
+
+Yes, this is possible.
+
+_**Can I have multiple service workers on a page?**_
+
+Yes, but only with different scopes. You can use a service worker for the /help "subdirectory" and one for the rest of your app. The more specific service worker (=> /help) overwrites the other one for its scope.
+
+_**Can Service Workers communicate with my Page/ the "normal" JavaScript code there?**_
+
+Yes, that's possible using messages. Have a look at the following thread for more infos: https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#Sending_messages_to_and_from_a_dedicated_worker
+
+This is actually not Service Worker specific, it applies to all Web Workers.
+
+_**What's the difference between Web Workers and Service Workers?**_
+
+Service Workers are a special type of Web Workers. Web Workers also run on a background thread, decoupled from the DOM. They don't keep on living after the page is closed though. The Service Worker on the other hand, keeps on running (depending on the operating system) and also is decoupled from an individual page. 
+
+# Useful Links:
+
+* Are Service Workers Ready? - Check Browser Support: https://jakearchibald.github.io/isserviceworkerready/
+* Setting up Remote Debugging on Chrome: https://developers.google.com/web/tools/chrome-devtools/remote-debugging/
+* Getting that "Web App Install Banner": https://developers.google.com/web/fundamentals/engage-and-retain/app-install-banners/
+* Getting Started with Service Workers (don't read too far, there's stuff in there we'll learn later ;-)): https://developers.google.com/web/fundamentals/getting-started/primers/service-workers

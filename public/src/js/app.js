@@ -1,3 +1,4 @@
+var deferredPrompt;
 // Check if the service worker feature is supported by the browser.
 // navigator simply is the browser
 if('serviceWorker' in navigator){
@@ -9,3 +10,10 @@ if('serviceWorker' in navigator){
         })
     ;
 }
+// preventing chrome from showing the install banner, save the event in variable to used later
+window.addEventListener('beforeinstallprompt', function (event) {
+    console.log('before install prompt');
+    event.preventDefault();
+    deferredPrompt = event;
+    return false;
+});
