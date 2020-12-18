@@ -291,6 +291,8 @@ self.addEventListener('install', function (event) {
         caches.open('static') // creates the cache if not exists
         .then(cache => {
             console.log('[Server worker] precaching App Shell ...');
+            cache.add('/');
+            cache.add('/index.html');
             cache.add('/src/js/app.js');
         })
     );
