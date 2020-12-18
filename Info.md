@@ -315,3 +315,32 @@ self.addEventListener('fetch', function (event) {
     );
 });
 ```
+#### Caching using addAll function:
+```
+.
+.
+self.addEventListener('install', function (event) {
+    console.log('[Service Worker] Installing service worker ...'); 
+    // this makes the code waits till the cache proccess reach the end.
+    event.waitUntil(
+        caches.open('static') // creates the cache if not exists
+        .then(function(cache) {
+            console.log('[Server worker] precaching App Shell ...');
+            cache.addAll([
+                '/',
+                '/index.html',
+                '/src/js/app.js',
+                '/src/js/feed.js',
+                '/src/js/material.min.js',
+                '/src/css/app.css',
+                '/src/css/feed.css',
+                '/src/images/main-image.jpg',
+                'https://fonts.googleapis.com/css?family=Roboto:400,700',
+                'https://fonts.googleapis.com/icon?family=Material+Icons',
+                'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
+            ]);
+        })
+    );
+});
+.
+```
