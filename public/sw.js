@@ -37,7 +37,17 @@ self.addEventListener('fetch', function (event) {
             if (response) {
                 return response;
             } else {
-                return fetch(event.request);
+                return fetch(event.request)
+                .then((res) => {
+                    // Save the dynamic fetches in dynamic cache, not in static/basic one.
+                    return caches.open('dynamic').
+                    then(cache => {
+                        // res.clone(), use because the response can be consumed  once only.
+                        cache.put(event.request.url, res.clone());
+                        return res;
+                    })
+                })
+                ;
             }
         })
     );

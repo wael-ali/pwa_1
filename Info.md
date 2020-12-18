@@ -344,3 +344,33 @@ self.addEventListener('install', function (event) {
 });
 .
 ```
+### Dynamic caching upon fetching:
+To implement the dynamic caching in the sw.js change the code under the fetch listner
+```
+.
+.
+self.addEventListener('fetch', function (event) {
+    // we can control the response to each request using this method
+   event.respondWith(
+       caches
+        .match(event.request)
+        .then(response => {
+            if (response) {
+                return response;
+            } else {
+                return fetch(event.request)
+                .then((res) => {
+                    // Save the dynamic fetches in dynamic cache, not in static/basic one.
+                    return caches.open('dynamic').
+                    then(cache => {
+                        // res.clone(), use because the response can be consumed  once only.
+                        cache.put(event.request.url, res.clone());
+                        return res;
+                    })
+                })
+                ;
+            }
+        })
+    );
+});
+```
