@@ -270,3 +270,12 @@ Dive deeper into the Fetch API:
 * Detailed Usage Guide (MDN): https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 * Detailed Usage Guide (and comparison with XMLHttpRequest): https://davidwalsh.name/fetch
 * Introduction to Fetch (Google): https://developers.google.com/web/updates/2015/03/introduction-to-fetch
+
+### Support offline access, why?
+* Poor connection.
+* No Connection.
+* Lie-Fie!  
+
+### The cach API
+we store key value pares (request: response)  in the chace.
+Cache data can be retrieved instead of sendeing Network request.
