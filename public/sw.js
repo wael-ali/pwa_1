@@ -1,9 +1,11 @@
+var STATIC_CACHE_VERSION = 'static-v2'; 
+var DYNAMIC_CACHE_VERSION = 'dynamic-v2'; 
 // self = the service worker
 self.addEventListener('install', function (event) {
     console.log('[Service Worker] Installing service worker ...'); 
     // this makes the code waits till the cache proccess reach the end.
     event.waitUntil(
-        caches.open('static-v2') // creates the cache if not exists
+        caches.open(STATIC_CACHE_VERSION) // creates the cache if not exists
         .then(function(cache) {
             console.log('[Server worker] precaching App Shell ...');
             cache.addAll([
@@ -24,6 +26,20 @@ self.addEventListener('install', function (event) {
 });
 // A comment one
 self.addEventListener('activate', function (event) {
+    event.waitUntil( // wait untill async code is resolved
+        caches
+            .keys() // Get all the cache names.
+            .then(keylist => {
+                return Promise.all(keylist.map( key => {
+                    // Check if the cache is current version.
+                    if (key !== STATIC_CACHE_VERSION && key !== DYNAMIC_CACHE_VERSION) {
+                        console.log('SW: removing old cache', key);
+                        // Delete old cache.
+                        caches.delete(key);
+                    }
+                }));
+            })
+    );
     // mybe will not be needed in future!!
     return self.clients.claim();
 });
@@ -40,7 +56,7 @@ self.addEventListener('fetch', function (event) {
                 return fetch(event.request)
                 .then((res) => {
                     // Save the dynamic fetches in dynamic cache, not in static/basic one.
-                    return caches.open('dynamic').
+                    return caches.open(DYNAMIC_CACHE_VERSION).
                     then(cache => {
                         // res.clone(), use because the response can be consumed  once only.
                         cache.put(event.request.url, res.clone());
