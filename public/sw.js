@@ -3,7 +3,7 @@ self.addEventListener('install', function (event) {
     console.log('[Service Worker] Installing service worker ...'); 
     // this makes the code waits till the cache proccess reach the end.
     event.waitUntil(
-        caches.open('static') // creates the cache if not exists
+        caches.open('static-v2') // creates the cache if not exists
         .then(function(cache) {
             console.log('[Server worker] precaching App Shell ...');
             cache.addAll([
@@ -22,7 +22,7 @@ self.addEventListener('install', function (event) {
         })
     );
 });
-
+// A comment one
 self.addEventListener('activate', function (event) {
     // mybe will not be needed in future!!
     return self.clients.claim();

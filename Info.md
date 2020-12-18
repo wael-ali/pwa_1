@@ -376,3 +376,58 @@ self.addEventListener('fetch', function (event) {
     );
 });
 ```
+## Notice:
+Go to feed.js and change the color of the text on the image card.
+```
+// feed.js
+.
+var cardTitleTextElement = document.createElement('h2');
+cardTitleTextElement.style.color = 'white';
+.
+.
+```
+now reload the page, nothing changed why?! because we get the cached responses that does not have the change yet. and due to no changes in sw.js cache will not be updated.
+to make these changes to be cached we need to change the sw.js add a comment somewhere
+and reload the page, _(make sure that you uncheck the offline box in the service worker in chrome devtool)_. now the changes are cached and the text is white, but this is not the best way.
+let us dive into 
+## cache versions managment:
+whenever there is changes in the assets,js,css files then we upgrade our cache to an other version.
+so we create new cache version in the SW install listner and cache all new files, and on activation of SW we delete the old cache version, _do not write over the old ones because the app use it till the SW is ctivated, and dont want to brack the user experience:
+```
+// sw.js
+
+self.addEventListener('install', function (event) {
+    console.log('[Service Worker] Installing service worker ...'); 
+    // this makes the code waits till the cache proccess reach the end.
+    event.waitUntil(
+        // caches.open('static') // creates the cache if not exists
+        caches.open('static-v2') // creates the cache if not exists
+        .then(function(cache) {
+            console.log('[Server worker] precaching App Shell ...');
+            cache.addAll([
+                '/',
+                '/index.html',
+                '/src/js/app.js',
+                '/src/js/feed.js',
+                '/src/js/material.min.js',
+                '/src/css/app.css',
+                '/src/css/feed.css',
+                '/src/images/main-image.jpg',
+                'https://fonts.googleapis.com/css?family=Roboto:400,700',
+                'https://fonts.googleapis.com/icon?family=Material+Icons',
+                'https://cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.3.0/material.indigo-pink.min.css'
+            ]);
+        })
+    );
+});
+.
+.
+```
+change the feed.js and make the color red:
+```
+.
+cardTitleTextElement.style.color = 'red';
+.
+```
+reload the page, see the new cache version, but the changes not applyed !!!.
+_we didn't delete the old version => we have two entries in the all caches_
