@@ -18,5 +18,15 @@ self.addEventListener('activate', function (event) {
 // None lifesycle event
 self.addEventListener('fetch', function (event) {
     // we can control the response to each request using this method
-   event.respondWith(fetch(event.request));
+   event.respondWith(
+       caches
+        .match(event.request)
+        .then(response => {
+            if (response) {
+                return response;
+            } else {
+                return fetch(event.request);
+            }
+        })
+    );
 });

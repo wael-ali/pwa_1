@@ -296,3 +296,20 @@ self.addEventListener('install', function (event) {
     );
 });
 ```
+#### Retriving Items From the cache:
+```
+self.addEventListener('fetch', function (event) {
+    // we can control the response to each request using this method
+   event.respondWith(
+       caches
+        .match(event.request)
+        .then(response => {
+            if (response) {
+                return response;
+            } else {
+                return fetch(event.request);
+            }
+        })
+    );
+});
+```
