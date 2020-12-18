@@ -279,3 +279,20 @@ Dive deeper into the Fetch API:
 ### The cach API
 we store key value pares (request: response)  in the chace.
 Cache data can be retrieved instead of sendeing Network request.
+#### Static Caching:
+This means to cahce the App Shell, all the static files and assets that are not probably be changed frequently like the js files and css and images, let's make use of the sw.js life sycle events for that ;-):
+```
+// sw.js
+
+self.addEventListener('install', function (event) {
+    console.log('[Service Worker] Installing service worker ...'); 
+    // this makes the code waits till the cache proccess reach the end
+    event.waitUntil(
+        caches.open('static') // creates the cache if not exists
+        .then(cache => {
+            console.log('[Server worker] precaching App Shell ...');
+            cache.add('/src/js/app.js');
+        })
+    );
+});
+```
